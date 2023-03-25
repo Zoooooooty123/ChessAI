@@ -3,6 +3,25 @@ import chess
 import chess.engine
 import numpy as np
 from sklearn.neural_network import MLPRegressor
+import pygame
+
+# Initialize Pygame
+pygame.init()
+
+# Set the window size and title
+WINDOW_SIZE = (640, 640)
+WINDOW_TITLE = "AI Chess Robot"
+screen = pygame.display.set_mode(WINDOW_SIZE)
+pygame.display.set_caption(WINDOW_TITLE)
+
+# Define the colors
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+GRAY = (128, 128, 128)
+LIGHT_GRAY = (192, 192, 192)
+
+# Define the font
+FONT = pygame.font.SysFont(None, 32)
 
 # Create a chess engine
 engine = chess.engine.SimpleEngine.popen_uci("stockfish")
@@ -78,20 +97,4 @@ for game in games:
         X_train.append(X)
         y_train.append(y)
         board.push(move)
-model = MLPRegressor(hidden_layer_sizes=(16, 8), max_iter=1000, activation='relu')
-model.fit(X_train, y_train)
-
-# Define the AI move function
-def ai_move(board):
-    """
-    Returns the best move for the AI using the Minimax algorithm and neural network evaluation
-    """
-    best_move = None
-    max_eval = float('-inf')
-    for move in board.legal_moves:
-        board.push(move)
-        eval = minimax(board, 3, float('-inf'), float('inf'), False)
-        board.pop()
-        if eval > max_eval:
-            max_eval = eval
-            best_move
+model = MLPRegressor(hidden_layer_sizes=(16, 8),
